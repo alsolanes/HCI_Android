@@ -140,6 +140,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void viewImage() {
-        //startActivity(new Intent(this, ImageListView.class));
+        startActivity(new Intent(this, ImageListView.class));
     }
 }
