@@ -3,6 +3,8 @@
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 
 		$image = $_POST['image'];
+		$lat = $_POST['lat'];
+		$lng = $_POST['lng'];
 
 		require_once('dbConnect.php');
 
@@ -20,7 +22,7 @@
 
 		$actualpath = "http://keepmytown.esy.es/PhotoUpload/$path";
 
-		$sql = "INSERT INTO photos (image) VALUES ('$actualpath')";
+		$sql = "INSERT INTO photos (image,lat,lng) VALUES ('$actualpath','$lat','$lng')";
 
 		if(mysqli_query($con,$sql)){
 			file_put_contents($path,base64_decode($image));

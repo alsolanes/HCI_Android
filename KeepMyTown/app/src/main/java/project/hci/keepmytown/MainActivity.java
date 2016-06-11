@@ -43,6 +43,8 @@ import java.util.jar.Manifest;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, LocationListener{
     public static final String UPLOAD_URL = "http://keepmytown.esy.es/PhotoUpload/upload.php";
     public static final String UPLOAD_KEY = "image";
+    public static final String KEY_LAT = "lat";
+    public static final String KEY_LNG = "lng";
     private int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonChoose;
@@ -141,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 HashMap<String,String> data = new HashMap<>();
 
                 data.put(UPLOAD_KEY, uploadImage);
+                // location info
+                data.put(KEY_LAT, String.valueOf(latitude));
+                data.put(KEY_LNG, String.valueOf(longitude));
                 String result = rh.sendPostRequest(UPLOAD_URL,data);
 
                 return result;
