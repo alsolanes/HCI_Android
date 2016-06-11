@@ -2,12 +2,25 @@ package project.hci.keepmytown;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 
@@ -16,12 +29,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ImageListView extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ImageListView extends AppCompatActivity implements AdapterView.OnItemClickListener, OnMapReadyCallback {
     private ListView listView;
 
     public static final String GET_IMAGE_URL="http://keepmytown.esy.es/PhotoUpload/getAllImages.php";
 
     public GetAlImages getAlImages;
+    public GoogleMap map;
 
     public static final String BITMAP_ID = "BITMAP_ID";
 
@@ -30,9 +44,13 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_list_view);
 
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setOnItemClickListener(this);
+        //listView = (ListView) findViewById(R.id.listView);
+        //listView.setOnItemClickListener(this);
         getURLs();
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     private void getImages(){
@@ -55,8 +73,33 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
                 for (int i = 0;i<GetAlImages.lats.length;i++){
                     coords[i] = String.valueOf(lats[i])+" "+String.valueOf(lngs[i]);
                 }
-                CustomList customList = new CustomList(ImageListView.this,GetAlImages.imageURLs,GetAlImages.bitmaps, coords);
-                listView.setAdapter(customList);
+
+                for(int i = 0; i< getAlImages.lats.length;i++) {
+                    //infowindow adapter
+                    final Bitmap bmF = getAlImages.bitmaps[i];
+                    map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                        @Override
+                        public View getInfoWindow(Marker marker) {
+                            return null;
+                        }
+
+                        @Override
+                        public View getInfoContents(Marker marker) {
+                            View myContentsView = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+                            ImageView imageView = (ImageView) myContentsView.findViewById(R.id.imgView_map_info_content);
+                            imageView.setImageBitmap(bmF);
+                            return myContentsView;
+                        }
+                    });
+
+
+                    map.addMarker(new MarkerOptions()
+                            .position(new LatLng(getAlImages.lats[i], getAlImages.lngs[i]))
+                            .title("Marker"));
+                }
+                //CustomList customList = new CustomList(ImageListView.this,GetAlImages.imageURLs,GetAlImages.bitmaps, coords);
+
+                //listView.setAdapter(customList);
             }
 
             @Override
@@ -124,4 +167,19 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
         intent.putExtra(BITMAP_ID,i);
         startActivity(intent);
     }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        this.map = map;
+        if(getAlImages!=null){
+        for(int i = 0; i< getAlImages.lats.length;i++) {
+
+            BitmapDescriptor bd = BitmapDescriptorFactory.fromBitmap(getAlImages.bitmaps[i]);
+
+            map.addMarker(new MarkerOptions()
+                    .position(new LatLng(getAlImages.lats[i], getAlImages.lngs[i]))
+                    .title("Marker")
+                    .icon(bd));
+        }
+    }}
 }
