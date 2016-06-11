@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
                  **/
+
                 super.onPreExecute();
                 loading = ProgressDialog.show(MainActivity.this, "Uploading...", null,true,true);
             }

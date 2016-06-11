@@ -16,10 +16,14 @@ import java.net.URL;
  */
 public class GetAlImages {
     public static String[] imageURLs;
+    public static double[] lats;
+    public static double[] lngs;
     public static Bitmap[] bitmaps;
 
     public static final String JSON_ARRAY="result";
     public static final String IMAGE_URL = "url";
+    public static final String LAT = "lat";
+    public static final String LNG = "lng";
     private String json;
     private JSONArray urls;
 
@@ -53,9 +57,12 @@ public class GetAlImages {
         bitmaps = new Bitmap[urls.length()];
 
         imageURLs = new String[urls.length()];
-
+        lats = new double[urls.length()];
+        lngs = new double[urls.length()];
         for(int i=0;i<urls.length();i++){
             imageURLs[i] = urls.getJSONObject(i).getString(IMAGE_URL);
+            lats[i] = urls.getJSONObject(i).getDouble(LAT);
+            lngs[i] = urls.getJSONObject(i).getDouble(LNG);
             JSONObject jsonObject = urls.getJSONObject(i);
             bitmaps[i]=getImage(jsonObject);
         }

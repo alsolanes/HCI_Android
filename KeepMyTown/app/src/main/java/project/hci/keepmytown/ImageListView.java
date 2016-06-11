@@ -49,7 +49,13 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
                 super.onPostExecute(v);
                 loading.dismiss();
                 //Toast.makeText(ImageListView.this,"Success",Toast.LENGTH_LONG).show();
-                CustomList customList = new CustomList(ImageListView.this,GetAlImages.imageURLs,GetAlImages.bitmaps);
+                double[] lats = GetAlImages.lats;
+                double[] lngs = GetAlImages.lngs;
+                String[] coords = new String[GetAlImages.lats.length];
+                for (int i = 0;i<GetAlImages.lats.length;i++){
+                    coords[i] = String.valueOf(lats[i])+" "+String.valueOf(lngs[i]);
+                }
+                CustomList customList = new CustomList(ImageListView.this,GetAlImages.imageURLs,GetAlImages.bitmaps, coords);
                 listView.setAdapter(customList);
             }
 
