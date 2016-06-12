@@ -97,31 +97,31 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
                     map.addMarker(new MarkerOptions()
                             .position(new LatLng(getAlImages.lats[i], getAlImages.lngs[i]))
                             .title(getAlImages.imageURLs[i]));
-                    map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    //map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        //@Override
+                        //public void onInfoWindowClick(Marker marker) {
+                    map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                         @Override
-                        public void onInfoWindowClick(Marker marker) {
-                            map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                                @Override
-                                public View getInfoWindow(Marker marker) {
-                                    return null;
-                                }
+                        public View getInfoWindow(Marker marker) {
+                            return null;
+                        }
 
-                                @Override
-                                public View getInfoContents(Marker marker) {
-                                    View myContentsView = getLayoutInflater().inflate(R.layout.info_window_layout, null);
-                                    ImageView imageView = (ImageView) myContentsView.findViewById(R.id.imgView_map_info_content);
-                                    URL url = null;
-                                    //url = new URL(marker.getTitle());
-                                    //Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                    //imageView.setImageBitmap(image);
-                                    Picasso.with(getApplicationContext()).load(marker.getTitle()).into(imageView);
+                        @Override
+                        public View getInfoContents(Marker marker) {
+                            View myContentsView = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+                            ImageView imageView = (ImageView) myContentsView.findViewById(R.id.imgView_map_info_content);
+                            URL url = null;
+                            //url = new URL(marker.getTitle());
+                            //Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                            //imageView.setImageBitmap(image);
+                            Picasso.with(getApplicationContext()).load(marker.getTitle()).into(imageView);
 
 
-                                    return myContentsView;
-                                }
-                            });
+                            return myContentsView;
                         }
                     });
+                        //}
+                    //});
                 }
                 //CustomList customList = new CustomList(ImageListView.this,GetAlImages.imageURLs,GetAlImages.bitmaps, coords);
 
