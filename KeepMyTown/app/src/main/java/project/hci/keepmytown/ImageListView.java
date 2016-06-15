@@ -18,8 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +38,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -96,7 +99,8 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
 
                     map.addMarker(new MarkerOptions()
                             .position(new LatLng(getAlImages.lats[i], getAlImages.lngs[i]))
-                            .title(getAlImages.imageURLs[i]));
+                            .title(getAlImages.imageURLs[i])
+                            .snippet(getAlImages.cmnts[i]));
                     //map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         //@Override
                         //public void onInfoWindowClick(Marker marker) {
@@ -110,11 +114,13 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
                         public View getInfoContents(Marker marker) {
                             View myContentsView = getLayoutInflater().inflate(R.layout.info_window_layout, null);
                             ImageView imageView = (ImageView) myContentsView.findViewById(R.id.imgView_map_info_content);
+                            TextView txtCmnt = (TextView) myContentsView.findViewById(R.id.txtView_cmnt);
                             URL url = null;
                             //url = new URL(marker.getTitle());
                             //Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                             //imageView.setImageBitmap(image);
                             Picasso.with(getApplicationContext()).load(marker.getTitle()).into(imageView);
+                            txtCmnt.setText(marker.getSnippet());
 
 
                             return myContentsView;
@@ -224,7 +230,7 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                     .zoom(15)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
+                    //.bearing(90)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -237,8 +243,8 @@ public class ImageListView extends AppCompatActivity implements AdapterView.OnIt
 
             map.addMarker(new MarkerOptions()
                     .position(new LatLng(getAlImages.lats[i], getAlImages.lngs[i]))
-                    .title("Marker")
-                    .icon(bd));
+                    .title(getAlImages.imageURLs[i])
+                    .snippet(getAlImages.cmnts[i]));
         }
     }}
 

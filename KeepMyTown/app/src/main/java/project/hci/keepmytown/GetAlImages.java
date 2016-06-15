@@ -19,11 +19,13 @@ public class GetAlImages {
     public static double[] lats;
     public static double[] lngs;
     public static Bitmap[] bitmaps;
+    public static String[] cmnts;
 
     public static final String JSON_ARRAY="result";
     public static final String IMAGE_URL = "url";
     public static final String LAT = "lat";
     public static final String LNG = "lng";
+    public static final String CMNT = "cmnt";
     private String json;
     private JSONArray urls;
 
@@ -59,12 +61,14 @@ public class GetAlImages {
         imageURLs = new String[urls.length()];
         lats = new double[urls.length()];
         lngs = new double[urls.length()];
+        cmnts = new String[urls.length()];
         for(int i=0;i<urls.length();i++){
             imageURLs[i] = urls.getJSONObject(i).getString(IMAGE_URL);
             lats[i] = urls.getJSONObject(i).getDouble(LAT);
             lngs[i] = urls.getJSONObject(i).getDouble(LNG);
             JSONObject jsonObject = urls.getJSONObject(i);
             bitmaps[i]=getImage(jsonObject);
+            cmnts[i] = urls.getJSONObject(i).getString(CMNT);
         }
     }
 }

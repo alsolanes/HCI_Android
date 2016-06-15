@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String UPLOAD_KEY = "image";
     public static final String KEY_LAT = "lat";
     public static final String KEY_LNG = "lng";
+    public static final String KEY_CMNT = "cmnt";
     private int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonChoose;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String provider;
     private double latitude, longitude;
+    private String cmntText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // location info
                 data.put(KEY_LAT, String.valueOf(latitude));
                 data.put(KEY_LNG, String.valueOf(longitude));
+                data.put(KEY_CMNT, cmntText);
                 String result = rh.sendPostRequest(UPLOAD_URL,data);
 
                 return result;
@@ -166,6 +170,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(v == buttonUpload){
+            EditText edt = (EditText)findViewById(R.id.cmntText);
+            cmntText = edt.getText().toString();
             uploadImage();
         }
 
